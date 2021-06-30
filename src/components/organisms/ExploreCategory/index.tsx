@@ -7,6 +7,13 @@ import { useQuery } from "@apollo/client";
 import { CATEGORY_LIST } from "../../../graphql";
 import { CategoryType } from "../../../Types";
 import CircularProgress from "@material-ui/core/CircularProgress";
+import { makeStyles } from "@material-ui/core/styles";
+
+const useStyles = makeStyles({
+  categoryContainer: {
+    margin: "1em 0",
+  },
+});
 
 interface Props {
   changeHandler: (categoryId: string) => void;
@@ -16,6 +23,7 @@ const ExploreCategory: React.FC<Props> = ({ changeHandler }) => {
   const [anchorEl, setAnchorEl] = useState(null);
   const { loading, data, error } = useQuery(CATEGORY_LIST);
   const btnRef = React.createRef();
+  const styles = useStyles();
 
   const handleClick = (event: any) => {
     setAnchorEl(event.currentTarget);
@@ -26,14 +34,13 @@ const ExploreCategory: React.FC<Props> = ({ changeHandler }) => {
   };
 
   const handleCategoryClick = (categoryId: string) => {
-    // console.log(categoryId);
     changeHandler(categoryId);
     handleClose();
   };
 
   if (error) return null;
   return (
-    <div>
+    <div className={styles.categoryContainer}>
       <Button
         color="primary"
         variant="contained"

@@ -17,9 +17,11 @@ const useStyles = makeStyles({
 
 interface Props {
   payload: CategoryType;
+  isUser: boolean;
+  cartHandler: (product: ProductType) => void;
 }
 
-const Category: React.FC<Props> = ({ payload }) => {
+const Category: React.FC<Props> = ({ payload, isUser, cartHandler }) => {
   const styles = useStyles();
   return (
     <div>
@@ -29,7 +31,14 @@ const Category: React.FC<Props> = ({ payload }) => {
       <hr />
       <div className={styles.productsContainer}>
         {payload.products.map((item: ProductType) => {
-          return <Product key={item.productId} product={item} />;
+          return (
+            <Product
+              key={item.productId}
+              product={item}
+              isUser={isUser}
+              cartHandler={cartHandler}
+            />
+          );
         })}
       </div>
     </div>

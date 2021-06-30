@@ -1,13 +1,16 @@
 import React, { useState } from "react";
-import FilteredCategory from "../../organisms/FilteredCatalogue";
+import FilteredCatalouge from "../../organisms/FilteredCatalogue";
 import ExploreCategory from "../../organisms/ExploreCategory";
 import Catelogue from "../Catalogue";
+import { useAuth0 } from "@auth0/auth0-react";
+import { ProductType } from "../../../Types";
 
 const Inventory: React.FC = () => {
+  const { isAuthenticated } = useAuth0();
   const [showCatelogue, setShowCatelogue] = useState(true);
   const [exploreCategoryId, setExploreCategoryId] = useState("");
 
-  const handleExploreChange = (categoryId: string) => {
+  const handleCategoryChange = (categoryId: string) => {
     if (categoryId === "") setShowCatelogue(true);
     else {
       setExploreCategoryId(categoryId);
@@ -15,13 +18,21 @@ const Inventory: React.FC = () => {
     }
   };
 
+  const handleAddCart = (product: ProductType) => {
+    console.log(product);
+  };
+
   return (
     <>
-      <ExploreCategory changeHandler={handleExploreChange} />
+      <ExploreCategory changeHandler={handleCategoryChange} />
       {showCatelogue ? (
-        <Catelogue />
+        <Catelogue isUser={isAuthenticated} cartHandler={handleAddCart} />
       ) : (
-        <FilteredCategory categoryId={exploreCategoryId} />
+        <FilteredCatalouge
+          categoryId={exploreCategoryId}
+          isUser={isAuthenticated}
+          cartHandler={handleAddCart}
+        />
       )}
     </>
   );

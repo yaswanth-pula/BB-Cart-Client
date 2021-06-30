@@ -21,10 +21,11 @@ const useStyles = makeStyles({
 
 interface Props {
   product: ProductType;
+  isUser: boolean;
+  cartHandler: (product: ProductType) => void;
 }
 
-const Product: React.FC<Props> = ({ product }) => {
-  console.log(product);
+const Product: React.FC<Props> = ({ product, isUser, cartHandler }) => {
   const styles = useStyles();
   return (
     <>
@@ -39,9 +40,15 @@ const Product: React.FC<Props> = ({ product }) => {
         <Typography variant="subtitle2" className={styles.textMargin}>
           MRP: ₹{product.price}
         </Typography>
-        <Button variant="contained" color="primary">
-          + Add To Cart
-        </Button>
+        {isUser && (
+          <Button
+            variant="contained"
+            color="primary"
+            onClick={() => cartHandler(product)}
+          >
+            + Add To Cart
+          </Button>
+        )}
       </Card>
     </>
   );
