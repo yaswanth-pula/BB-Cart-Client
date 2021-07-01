@@ -11,5 +11,8 @@ interface CategoryType {
   name: string;
   products: [ProductType];
 }
+interface OrderItemType extends ProductType {
+  quantity: number;
+}
 
-export type { CategoryType, ProductType };
+export type { CategoryType, ProductType, OrderItemType };

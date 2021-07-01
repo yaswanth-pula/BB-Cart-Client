@@ -1,7 +1,7 @@
 import React from "react";
 import Typography from "@material-ui/core/Typography";
 import { CategoryType, ProductType } from "../../../Types";
-import Product from "../Product";
+import Product from "../../atoms/Product";
 import { makeStyles } from "@material-ui/core/styles";
 
 const useStyles = makeStyles({

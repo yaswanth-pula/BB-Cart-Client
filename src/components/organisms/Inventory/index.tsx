@@ -5,7 +5,11 @@ import Catelogue from "../Catalogue";
 import { useAuth0 } from "@auth0/auth0-react";
 import { ProductType } from "../../../Types";
 
-const Inventory: React.FC = () => {
+interface Props {
+  handleAddCart: (product: ProductType) => void;
+}
+
+const Inventory: React.FC<Props> = ({ handleAddCart }) => {
   const { isAuthenticated } = useAuth0();
   const [showCatelogue, setShowCatelogue] = useState(true);
   const [exploreCategoryId, setExploreCategoryId] = useState("");
@@ -16,10 +20,6 @@ const Inventory: React.FC = () => {
       setExploreCategoryId(categoryId);
       setShowCatelogue(false);
     }
-  };
-
-  const handleAddCart = (product: ProductType) => {
-    console.log(product);
   };
 
   return (

@@ -14,10 +14,9 @@ interface Props {
 const Catelogue: React.FC<Props> = ({ isUser, cartHandler }) => {
   const { loading, error, data } = useQuery(CATELOUGE);
 
-  if (error) {
-    console.log(error);
+  if (error)
     return <Typography variant="h3">Internal Server Error 500</Typography>;
-  }
+
   return (
     <div>
       {loading ? (

@@ -1,25 +1,36 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useMemo } from "react";
 import Container from "@material-ui/core/Container";
 import Typography from "@material-ui/core/Typography";
 import Inventory from "../../organisms/Inventory";
 import User from "../../organisms/User";
 import { useAuth0 } from "@auth0/auth0-react";
 import CircularProgress from "@material-ui/core/CircularProgress";
-import { ApolloClient, ApolloProvider, InMemoryCache } from "@apollo/client";
+import { ApolloProvider } from "@apollo/client";
+import Cart from "../../organisms/Cart";
+import { ProductType } from "../../../Types";
+import { addProductToStore } from "../../../services/localstore";
+import createApolloClient from "../../../apollo";
+import Snackbar from "@material-ui/core/Snackbar";
+import { makeStyles } from "@material-ui/core";
 
-const createApolloClient = (authToken: string) => {
-  return new ApolloClient({
-    uri: "http://localhost:5000/graphql",
-    cache: new InMemoryCache(),
-    headers: {
-      authorization: `Bearer ${authToken}`,
-    },
-  });
-};
+const useStyles = makeStyles({
+  navBar: {
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "space-between",
+    margin: "1em 0",
+  },
+});
 
 const App: React.FC = () => {
-  const { isLoading, isAuthenticated, getAccessTokenSilently } = useAuth0();
+  const styles = useStyles();
+
+  const { isLoading, isAuthenticated, getAccessTokenSilently, user } =
+    useAuth0();
   const [authToken, setAuthToken] = useState<string>("");
+  const [cartUpdate, setCartUpdate] = useState("");
+  const [showSnackBar, setShowSnackBar] = useState(false);
+  const [snackBarMessage, setSnackBarMessage] = useState("");
 
   useEffect(() => {
     const genrateToken = async () => {
@@ -31,20 +42,49 @@ const App: React.FC = () => {
     genrateToken();
   }, [isAuthenticated, getAccessTokenSilently]);
 
+  const bbCartClient = useMemo(
+    () => createApolloClient(authToken),
+    [authToken]
+  );
+
+  const handleAddCart = (product: ProductType) => {
+    addProductToStore(user?.sub || "", product);
+    setCartUpdate(Date());
+    setSnackBarMessage(`Added ${product.units} ${product.name} to Cart`);
+    setShowSnackBar(true);
+  };
+
+  const handleSnackBarClose = () => {
+    setShowSnackBar(false);
+  };
+
   if (isLoading) return <CircularProgress />;
 
-  const bbCartClient = createApolloClient(authToken);
-
   return (
-    <Container maxWidth="md">
-      <>
-        <Typography variant="h3">BB Cart</Typography>
-        <User />
-        <ApolloProvider client={bbCartClient}>
-          <Inventory />
-        </ApolloProvider>
-      </>
-    </Container>
+    <>
+      <Container maxWidth="md">
+        <div className={styles.navBar}>
+          <Typography variant="h3">BB Cart</Typography>
+          <Cart cartUpdate={cartUpdate} />
+          <User />
+        </div>
+        <>
+          <ApolloProvider client={bbCartClient}>
+            <Inventory handleAddCart={handleAddCart} />
+          </ApolloProvider>
+          <Snackbar
+            anchorOrigin={{
+              vertical: "top",
+              horizontal: "right",
+            }}
+            open={showSnackBar}
+            onClose={handleSnackBarClose}
+            autoHideDuration={3000}
+            message={snackBarMessage}
+          />
+        </>
+      </Container>
+    </>
   );
 };
 

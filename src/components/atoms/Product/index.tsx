@@ -4,6 +4,7 @@ import Card from "@material-ui/core/Card";
 import Typography from "@material-ui/core/Typography";
 import { makeStyles } from "@material-ui/core/styles";
 import Button from "@material-ui/core/Button";
+import AddShoppingCartIcon from "@material-ui/icons/AddShoppingCart";
 
 const useStyles = makeStyles({
   cardContainer: {
@@ -45,8 +46,9 @@ const Product: React.FC<Props> = ({ product, isUser, cartHandler }) => {
             variant="contained"
             color="primary"
             onClick={() => cartHandler(product)}
+            startIcon={<AddShoppingCartIcon />}
           >
-            + Add To Cart
+            Add To Cart
           </Button>
         )}
       </Card>
