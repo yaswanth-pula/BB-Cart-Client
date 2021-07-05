@@ -15,6 +15,15 @@ const getCartItemsWithQuantity = (userId: string): OrderItemType[] => {
   });
 };
 
+const clearCartItems = (userId: string) => {
+  const cartItems = getCartItemsFromStore(userId);
+  for (let item of cartItems) {
+    let itemKey = getItemKey(userId, item.productId);
+    localStorage.removeItem(itemKey);
+  }
+  localStorage.removeItem(userId);
+};
+
 const updateLocalStore = (userId: string, userItems: ProductType[]) => {
   localStorage.setItem(userId, JSON.stringify(userItems));
 };
@@ -33,14 +42,18 @@ const isNewItem = (cart: ProductType[], productId: string): boolean => {
   return true;
 };
 
+const getItemKey = (userId: string, productId: string): string => {
+  return userId + "@" + productId;
+};
+
 const getItemQuantity = (userId: string, productId: string): number => {
-  let itemKey = userId + "@" + productId;
+  let itemKey = getItemKey(userId, productId);
   return Number(localStorage.getItem(itemKey) || "0");
 };
 
 const updateQuantity = (userId: string, productId: string) => {
   let quantity = getItemQuantity(userId, productId);
-  let itemKey = userId + "@" + productId;
+  let itemKey = getItemKey(userId, productId);
   localStorage.setItem(itemKey, JSON.stringify(quantity + 1));
 };
 
@@ -49,4 +62,5 @@ export {
   getCartItemsFromStore,
   getItemQuantity,
   getCartItemsWithQuantity,
+  clearCartItems,
 };

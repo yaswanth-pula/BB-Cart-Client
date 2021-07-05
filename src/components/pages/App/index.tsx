@@ -12,6 +12,10 @@ import { addProductToStore } from "../../../services/localstore";
 import createApolloClient from "../../../apollo";
 import Snackbar from "@material-ui/core/Snackbar";
 import { makeStyles } from "@material-ui/core";
+import Button from "@material-ui/core/Button";
+import Orders from "../../organisms/Orders";
+import IconButton from "@material-ui/core/Button";
+import HomeIcon from "@material-ui/icons/Home";
 
 const useStyles = makeStyles({
   navBar: {
@@ -31,6 +35,7 @@ const App: React.FC = () => {
   const [cartUpdate, setCartUpdate] = useState("");
   const [showSnackBar, setShowSnackBar] = useState(false);
   const [snackBarMessage, setSnackBarMessage] = useState("");
+  const [showOrders, setShowOrders] = useState(false);
 
   useEffect(() => {
     const genrateToken = async () => {
@@ -54,6 +59,14 @@ const App: React.FC = () => {
     setShowSnackBar(true);
   };
 
+  const handleViewOrders = () => {
+    setShowOrders(true);
+  };
+
+  const handleInventory = () => {
+    setShowOrders(false);
+  };
+
   const handleSnackBarClose = () => {
     setShowSnackBar(false);
   };
@@ -62,28 +75,46 @@ const App: React.FC = () => {
 
   return (
     <>
-      <Container maxWidth="md">
-        <div className={styles.navBar}>
-          <Typography variant="h3">BB Cart</Typography>
-          <Cart cartUpdate={cartUpdate} />
-          <User />
-        </div>
-        <>
-          <ApolloProvider client={bbCartClient}>
-            <Inventory handleAddCart={handleAddCart} />
-          </ApolloProvider>
-          <Snackbar
-            anchorOrigin={{
-              vertical: "top",
-              horizontal: "right",
-            }}
-            open={showSnackBar}
-            onClose={handleSnackBarClose}
-            autoHideDuration={3000}
-            message={snackBarMessage}
-          />
-        </>
-      </Container>
+      <ApolloProvider client={bbCartClient}>
+        <Container maxWidth="md">
+          <div className={styles.navBar}>
+            <Typography variant="h3" onClick={handleInventory}>
+              BB Cart
+            </Typography>
+            <IconButton onClick={handleInventory}>
+              <HomeIcon color="primary" fontSize="large" />
+            </IconButton>
+            <Cart cartUpdate={cartUpdate} />
+            {isAuthenticated && (
+              <Button
+                variant="contained"
+                color="primary"
+                onClick={handleViewOrders}
+              >
+                My Orders
+              </Button>
+            )}
+            <User />
+          </div>
+          <>
+            {showOrders ? (
+              <Orders />
+            ) : (
+              <Inventory handleAddCart={handleAddCart} />
+            )}
+            <Snackbar
+              anchorOrigin={{
+                vertical: "top",
+                horizontal: "right",
+              }}
+              open={showSnackBar}
+              onClose={handleSnackBarClose}
+              autoHideDuration={3000}
+              message={snackBarMessage}
+            />
+          </>
+        </Container>
+      </ApolloProvider>
     </>
   );
 };

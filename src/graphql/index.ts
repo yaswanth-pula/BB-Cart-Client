@@ -1,5 +1,4 @@
 import { gql } from "@apollo/client";
-
 const CATEGORY_FRAGMENT = gql`
   fragment CategoryFields on Category {
     categoryId
@@ -51,4 +50,29 @@ const CATEGORY_BY_ID = gql`
   }
 `;
 
-export { CATELOUGE, CATEGORY_BY_ID, CATEGORY_LIST };
+const USER_ORDERS = gql`
+  query allUserOrders {
+    userOrders {
+      orderId
+      products {
+        name
+        quantity
+        units
+      }
+    }
+  }
+`;
+
+const PLACE_USER_ORDER = gql`
+  mutation ($userOrder: String) {
+    placeUserOrder(userOrder: $userOrder)
+  }
+`;
+
+export {
+  CATELOUGE,
+  CATEGORY_BY_ID,
+  CATEGORY_LIST,
+  PLACE_USER_ORDER,
+  USER_ORDERS,
+};

@@ -10,7 +10,6 @@ const useStyles = makeStyles({
   cardContainer: {
     display: "flex",
     flexDirection: "column",
-    fontFamily: "inherit",
     maxWidth: "300px",
     margin: "0.5em",
     padding: "1rem",

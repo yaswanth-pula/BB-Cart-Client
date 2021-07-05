@@ -60,7 +60,7 @@ const ExploreCategory: React.FC<Props> = ({ changeHandler }) => {
         anchorOrigin={{ vertical: "bottom", horizontal: "left" }}
         transformOrigin={{ vertical: "top", horizontal: "left" }}
       >
-        <MenuItem onClick={() => handleCategoryClick("")}>All</MenuItem>
+        <MenuItem onClick={() => handleCategoryClick("all")}>All</MenuItem>
         {loading ? (
           <CircularProgress />
         ) : (

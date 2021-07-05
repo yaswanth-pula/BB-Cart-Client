@@ -6,7 +6,6 @@ import { makeStyles } from "@material-ui/core/styles";
 
 const useStyles = makeStyles({
   categoryHeader: {
-    // textAlign: "center",
     marginTop: "2rem",
   },
   productsContainer: {

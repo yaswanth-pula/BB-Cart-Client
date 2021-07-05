@@ -13,9 +13,6 @@ const useStyles = makeStyles({
   },
   logout: {
     marginLeft: "1em",
-    "& hover": {
-      color: "primary",
-    },
   },
 });
 

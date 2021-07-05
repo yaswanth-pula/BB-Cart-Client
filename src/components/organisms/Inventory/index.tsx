@@ -15,7 +15,7 @@ const Inventory: React.FC<Props> = ({ handleAddCart }) => {
   const [exploreCategoryId, setExploreCategoryId] = useState("");
 
   const handleCategoryChange = (categoryId: string) => {
-    if (categoryId === "") setShowCatelogue(true);
+    if (categoryId === "all") setShowCatelogue(true);
     else {
       setExploreCategoryId(categoryId);
       setShowCatelogue(false);
